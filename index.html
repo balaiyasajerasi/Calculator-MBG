@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="id" data-theme="dark" data-lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="description" content="Kalkulator MBG — Hitung berapa nominal kamu setara berapa lama Program Makan Bergizi Gratis berjalan.">
+  <meta property="og:title" content="Modern MBG Calculator">
+  <meta property="og:description" content="Fun calculator: nominalmu = berapa hari/jam MBG?">
+  <title>Modern MBG Calculator</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Syne:wght@700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════════
+     DEVICE WARNING (injected by JS if needed)
+     ═══════════════════════════════════════════ -->
+<div id="device-warning" class="hidden">
+  <div class="dw-box glass">
+    <div class="dw-icon">⚠️</div>
+    <div class="dw-title" data-i18n="device_warning_title">Perangkat Tidak Didukung</div>
+    <div class="dw-body" data-i18n="device_warning_body">Layar perangkat kamu terlalu kecil. Gunakan HP, tablet, laptop, atau PC untuk tampilan terbaik.</div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     INTRO SCREEN (Netflix-style)
+     ═══════════════════════════════════════════ -->
+<div id="intro-screen">
+  <canvas id="intro-particles"></canvas>
+  <div id="intro-content">
+    <div id="intro-logo-wrap">
+      <div id="intro-logo">
+        <div class="logo-ring r1"></div>
+        <div class="logo-ring r2"></div>
+        <div class="logo-ring r3"></div>
+        <div class="logo-inner">
+          <span class="logo-mbg">MBG</span>
+          <span class="logo-calc">CALC</span>
+        </div>
+      </div>
+    </div>
+    <div id="intro-title">
+      <span class="it-modern">Modern</span>
+      <span class="it-mbg">MBG</span>
+      <span class="it-calculator">Calculator</span>
+    </div>
+    <div id="intro-sub" data-i18n="intro_sub">Seberapa besar nominalmu dibanding anggaran MBG?</div>
+    <div id="intro-bar-wrap">
+      <div id="intro-bar"><div id="intro-bar-fill"></div></div>
+    </div>
+    <div id="intro-skip" data-i18n="intro_skip">Lewati intro</div>
+  </div>
+  <div id="intro-orbs">
+    <div class="iorb io1"></div>
+    <div class="iorb io2"></div>
+    <div class="iorb io3"></div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     MAIN APP
+     ═══════════════════════════════════════════ -->
+<div id="app" class="hidden">
+
+  <!-- BACKGROUND LAYERS -->
+  <canvas id="bg-particles"></canvas>
+  <div id="bg-orbs">
+    <div class="borb b1"></div>
+    <div class="borb b2"></div>
+    <div class="borb b3"></div>
+  </div>
+  <div id="bg-grid"></div>
+
+  <!-- ── HEADER ── -->
+  <header id="app-header" class="glass">
+    <div class="header-inner">
+      <div class="header-brand">
+        <!-- CSS Logo BGN/MBG -->
+        <div class="brand-logo" id="brand-logo">
+          <div class="bl-badge bgn">BGN</div>
+          <div class="bl-badge mbg">MBG</div>
+        </div>
+        <div class="brand-text">
+          <div class="brand-name">Modern <span class="gold">MBG</span> Calculator</div>
+          <div class="brand-sub" data-i18n="brand_sub">Kalkulator Makan Bergizi Gratis</div>
+        </div>
+      </div>
+      <nav class="header-nav">
+        <button class="nav-btn" id="btn-lang" aria-label="Toggle language">
+          <span id="lang-label">🇮🇩 ID</span>
+        </button>
+        <button class="nav-btn" id="btn-history" aria-label="History">
+          <span class="nav-icon">🕐</span>
+          <span data-i18n="nav_history">Riwayat</span>
+          <span class="history-badge hidden" id="history-badge">0</span>
+        </button>
+        <button class="nav-btn nav-icon-only" id="btn-scroll-top" aria-label="Scroll to top">↑</button>
+      </nav>
+    </div>
+  </header>
+
+  <!-- ── HERO / MAIN CALCULATOR ── -->
+  <section id="hero-section">
+    <div class="hero-inner">
+
+      <!-- LEFT: CALCULATOR CARD -->
+      <div class="calc-card glass" id="calc-card">
+
+        <div class="calc-header">
+          <h1 class="calc-title">
+            <span data-i18n="calc_title_1">Bandingkan Nominalmu</span><br>
+            <span class="gold" data-i18n="calc_title_2">dengan Program MBG</span>
+          </h1>
+          <p class="calc-subtitle">
+            <span data-i18n="calc_subtitle_1">1 hari MBG =</span>
+            <span class="gold bold" id="mbg-daily-label">Rp 1.200.000.000.000</span>
+            <span class="text-dim" data-i18n="calc_subtitle_2">(1,2 Triliun)</span>
+          </p>
+        </div>
+
+        <!-- INPUT AREA -->
+        <div class="input-section">
+          <label class="input-label" for="nominal-input" data-i18n="input_label">Masukkan Nominal (Rupiah)</label>
+          <div class="input-wrap" id="input-wrap">
+            <span class="input-rp">Rp</span>
+            <input
+              type="text"
+              id="nominal-input"
+              class="nominal-input"
+              placeholder="0"
+              inputmode="numeric"
+              autocomplete="off"
+              maxlength="25"
+              aria-label="Nominal rupiah"
+            >
+            <button class="input-clear hidden" id="input-clear" aria-label="Clear">✕</button>
+          </div>
+          <div class="input-formatted" id="input-formatted"></div>
+
+          <!-- QUICK PRESETS -->
+          <div class="presets-wrap" id="presets-wrap">
+            <button class="preset-chip" data-val="50000">Rp 50rb</button>
+            <button class="preset-chip" data-val="500000">Rp 500rb</button>
+            <button class="preset-chip" data-val="5000000">Rp 5jt</button>
+            <button class="preset-chip" data-val="1000000000">Rp 1M</button>
+            <button class="preset-chip" data-val="1000000000000">Rp 1T</button>
+            <button class="preset-chip gold-chip" data-val="1200000000000">= 1 hari MBG</button>
+          </div>
+        </div>
+
+        <!-- HITUNG BUTTON -->
+        <button class="btn-hitung" id="btn-hitung" disabled>
+          <span class="btn-hitung-text" data-i18n="btn_hitung">Hitung Sekarang</span>
+          <span class="btn-hitung-icon">→</span>
+        </button>
+
+        <!-- CALCULATING STATE -->
+        <div class="calculating-state hidden" id="calculating-state">
+          <div class="calc-anim-wrap">
+            <div class="calc-rings">
+              <div class="cr cr1"></div>
+              <div class="cr cr2"></div>
+              <div class="cr cr3"></div>
+            </div>
+            <div class="countdown-num" id="countdown-num">10</div>
+          </div>
+          <div class="calc-bar-wrap">
+            <div class="calc-progress-bar">
+              <div class="calc-progress-fill" id="calc-progress-fill"></div>
+              <div class="calc-progress-glow" id="calc-progress-glow"></div>
+            </div>
+          </div>
+          <div class="calc-status-text" id="calc-status-text" data-i18n="calculating">Menghitung...</div>
+        </div>
+
+        <!-- RESULT AREA -->
+        <div class="result-area hidden" id="result-area">
+
+          <div class="result-headline">
+            <div class="rh-label" data-i18n="result_equals">Nominalmu setara dengan</div>
+            <div class="rh-main" id="result-main-text">—</div>
+            <div class="rh-sub" id="result-sub-text"></div>
+          </div>
+
+          <!-- RESULT BREAKDOWN CARDS -->
+          <div class="result-breakdown" id="result-breakdown">
+            <!-- filled by JS -->
+          </div>
+
+          <!-- COMPARISON ROW -->
+          <div class="comparison-section">
+            <div class="cs-title" data-i18n="comparison_title">Setara dengan</div>
+            <div class="comparison-grid" id="comparison-grid">
+              <!-- filled by JS -->
+            </div>
+          </div>
+
+          <!-- ACTION BUTTONS -->
+          <div class="result-actions">
+            <button class="action-btn primary" id="btn-save-history">
+              <span>🕐</span>
+              <span data-i18n="btn_save">Simpan ke Riwayat</span>
+            </button>
+            <button class="action-btn secondary" id="btn-export-open">
+              <span>📤</span>
+              <span data-i18n="btn_export">Ekspor Hasil</span>
+            </button>
+            <button class="action-btn ghost" id="btn-reset">
+              <span>🔄</span>
+              <span data-i18n="btn_reset">Hitung Lagi</span>
+            </button>
+          </div>
+
+        </div><!-- result-area -->
+
+      </div><!-- calc-card -->
+
+      <!-- RIGHT: INFO PANEL -->
+      <aside class="info-panel" id="info-panel">
+
+        <div class="ip-card glass" id="ip-mbg-info">
+          <div class="ip-header">
+            <span class="ip-icon">ℹ️</span>
+            <span class="ip-title" data-i18n="ip_about_title">Tentang MBG</span>
+          </div>
+          <div class="ip-body">
+            <div class="ip-stat">
+              <div class="ips-label" data-i18n="ips_daily">Anggaran per Hari</div>
+              <div class="ips-val gold">Rp 1,2 Triliun</div>
+            </div>
+            <div class="ip-stat">
+              <div class="ips-label" data-i18n="ips_yearly">Anggaran 2026</div>
+              <div class="ips-val">Rp 335 Triliun</div>
+            </div>
+            <div class="ip-stat">
+              <div class="ips-label" data-i18n="ips_recipients">Target Penerima</div>
+              <div class="ips-val">82,9 Juta Orang</div>
+            </div>
+            <div class="ip-stat">
+              <div class="ips-label" data-i18n="ips_portion">Harga per Porsi</div>
+              <div class="ips-val">Rp 14.476</div>
+            </div>
+            <div class="ip-divider"></div>
+            <div class="ip-realtime">
+              <div class="ipr-label" data-i18n="ipr_today">Terpakai hari ini (est.)</div>
+              <div class="ipr-val" id="realtime-val">Rp 0</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="ip-card glass" id="ip-history-preview">
+          <div class="ip-header">
+            <span class="ip-icon">🕐</span>
+            <span class="ip-title" data-i18n="ip_history_title">Riwayat Terakhir</span>
+          </div>
+          <div id="history-preview-list">
+            <div class="history-empty" data-i18n="history_empty">Belum ada perhitungan</div>
+          </div>
+        </div>
+
+      </aside>
+
+    </div><!-- hero-inner -->
+  </section>
+
+  <!-- ── EXPORT MODAL ── -->
+  <div class="modal-overlay hidden" id="export-modal-overlay">
+    <div class="modal glass" id="export-modal" role="dialog" aria-modal="true">
+      <div class="modal-header">
+        <h2 class="modal-title" data-i18n="export_title">Ekspor Hasil</h2>
+        <button class="modal-close" id="export-modal-close" aria-label="Close">✕</button>
+      </div>
+      <div class="modal-body">
+
+        <!-- EXPORT TABS -->
+        <div class="export-tabs">
+          <button class="etab active" data-tab="png" data-i18n="etab_png">📷 PNG / File</button>
+          <button class="etab" data-tab="print" data-i18n="etab_print">🖨️ Print</button>
+          <button class="etab" data-tab="social" data-i18n="etab_social">📲 Social Media</button>
+        </div>
+
+        <!-- TAB: PNG -->
+        <div class="etab-content active" id="etab-png">
+          <p class="etab-desc" data-i18n="png_desc">Pilih resolusi ekspor. Resolusi lebih tinggi membutuhkan waktu render lebih lama.</p>
+          <div class="res-grid" id="res-grid">
+            <!-- filled by JS -->
+          </div>
+          <!-- Preview -->
+          <div class="export-preview-wrap">
+            <div class="export-preview" id="export-preview">
+              <!-- rendered by JS -->
+            </div>
+          </div>
+          <button class="btn-export-do" id="btn-download-png" disabled>
+            <span class="bed-icon">⬇</span>
+            <span class="bed-text" data-i18n="btn_download">Download PNG</span>
+            <span class="bed-delay hidden" id="export-delay-indicator"></span>
+          </button>
+        </div>
+
+        <!-- TAB: PRINT -->
+        <div class="etab-content hidden" id="etab-print">
+          <p class="etab-desc" data-i18n="print_desc">Sebelum mencetak, pastikan semua syarat berikut terpenuhi:</p>
+          <div class="print-checklist" id="print-checklist">
+            <!-- filled by JS -->
+          </div>
+          <div class="print-confirm-wrap hidden" id="print-confirm-wrap">
+            <div class="pcw-message" data-i18n="print_ready">Semua syarat terpenuhi. Siap mencetak!</div>
+            <button class="btn-export-do green" id="btn-do-print">
+              <span>🖨️</span>
+              <span data-i18n="btn_print_now">Cetak Sekarang</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- TAB: SOCIAL -->
+        <div class="etab-content hidden" id="etab-social">
+          <p class="etab-desc" data-i18n="social_desc">Pilih platform. Pastikan syarat berikut terpenuhi terlebih dahulu.</p>
+
+          <!-- Social checklist -->
+          <div class="social-checklist" id="social-checklist">
+            <label class="sc-item">
+              <input type="checkbox" class="sc-chk" id="sc-image">
+              <span data-i18n="sc_image">Gambar hasil sudah digenerate</span>
+            </label>
+            <label class="sc-item">
+              <input type="checkbox" class="sc-chk" id="sc-understand">
+              <span data-i18n="sc_understand">Saya mengerti ini bukan uang saya, hanya perbandingan fun</span>
+            </label>
+            <label class="sc-item">
+              <input type="checkbox" class="sc-chk" id="sc-share">
+              <span data-i18n="sc_share">Saya siap berbagi hasil ini</span>
+            </label>
+          </div>
+
+          <div class="social-platforms hidden" id="social-platforms">
+            <div class="sp-title" data-i18n="sp_title">Pilih platform:</div>
+            <div class="sp-grid">
+              <button class="sp-btn" id="btn-share-wa">
+                <span class="sp-icon">💬</span>
+                <span>WhatsApp</span>
+                <span class="sp-format">PNG</span>
+              </button>
+              <button class="sp-btn disabled" id="btn-share-yt">
+                <span class="sp-icon">▶️</span>
+                <span>YouTube</span>
+                <span class="sp-badge" data-i18n="coming_soon">Soon</span>
+              </button>
+            </div>
+            <p class="sp-note" data-i18n="wa_note">WhatsApp: gambar akan didownload, lalu share manual via WA.</p>
+          </div>
+        </div>
+
+      </div><!-- modal-body -->
+    </div><!-- modal -->
+  </div><!-- modal-overlay -->
+
+  <!-- ── HISTORY MODAL ── -->
+  <div class="modal-overlay hidden" id="history-modal-overlay">
+    <div class="modal glass" id="history-modal" role="dialog" aria-modal="true">
+      <div class="modal-header">
+        <h2 class="modal-title" data-i18n="history_title">Riwayat Perhitungan</h2>
+        <div class="modal-header-actions">
+          <button class="action-btn ghost small" id="btn-export-history" data-i18n="btn_export_history">Ekspor JSON</button>
+          <button class="action-btn ghost small red" id="btn-clear-history" data-i18n="btn_clear_history">Hapus Semua</button>
+          <button class="modal-close" id="history-modal-close" aria-label="Close">✕</button>
+        </div>
+      </div>
+      <div class="modal-body">
+        <div id="history-full-list">
+          <div class="history-empty" data-i18n="history_empty">Belum ada perhitungan</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── TOAST ── -->
+  <div id="toast-container"></div>
+
+  <!-- ── FOOTER ── -->
+  <footer id="app-footer">
+    <div class="footer-inner">
+      <div class="footer-wm">Modern MBG Calculator</div>
+      <div class="footer-note" data-i18n="footer_note">Fun calculator · Bukan afiliasi pemerintah · Data: BGN, Kemenkeu RI</div>
+      <div class="footer-lang">
+        <span data-i18n="footer_src">Sumber: Badan Gizi Nasional · APBN 2025–2026</span>
+      </div>
+    </div>
+  </footer>
+
+</div><!-- #app -->
+
+<!-- HIDDEN EXPORT CANVAS -->
+<canvas id="export-canvas" style="position:absolute;left:-9999px;top:-9999px;pointer-events:none;"></canvas>
+
+<!-- html2canvas -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js" defer></script>
+<!-- App scripts -->
+<script src="i18n.js" defer></script>
+<script src="app.js" defer></script>
+<script src="export.js" defer></script>
+</body>
+</html>
