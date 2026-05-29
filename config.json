@@ -1,0 +1,64 @@
+{
+  "app": {
+    "name": "Modern MBG Calculator",
+    "version": "1.0.0",
+    "watermark": "Modern MBG Calculator",
+    "defaultLang": "id",
+    "historyLimit": 50,
+    "introDurationMs": 4500,
+    "calcDelayMs": 10000
+  },
+  "mbg": {
+    "anggaranPerHari": 1200000000000,
+    "label_id": "1 Hari Program MBG",
+    "label_en": "1 Day of MBG Program",
+    "hargaPerPorsi": 14476,
+    "penerimaTarget": 82900000,
+    "mulaiProgram": "2025-01-06"
+  },
+  "calcDelay": {
+    "default":  10000,
+    "res_1440p": 5000,
+    "res_4k":   10000
+  },
+  "export": {
+    "resolutions": [
+      { "id": "1080p", "label": "Full HD 1080p", "w": 1920, "h": 1080, "scale": 2, "delayMs": 0 },
+      { "id": "1440p", "label": "QHD 1440p",     "w": 2560, "h": 1440, "scale": 3, "delayMs": 5000 },
+      { "id": "4k",    "label": "4K Ultra HD",    "w": 3840, "h": 2160, "scale": 4, "delayMs": 10000 }
+    ],
+    "social": {
+      "whatsapp": { "enabled": true,  "format": "png", "label": "WhatsApp" },
+      "youtube":  { "enabled": false, "comingSoon": true, "label": "YouTube" }
+    },
+    "print": {
+      "requirements": [
+        { "id": "ink",     "id_text": "Tinta printer penuh atau cukup",       "en_text": "Printer ink is sufficient" },
+        { "id": "color",   "id_text": "Printer mendukung cetak berwarna",     "en_text": "Printer supports color printing" },
+        { "id": "paper",   "id_text": "Kertas tersedia minimal A4",           "en_text": "Paper available (min. A4)" },
+        { "id": "online",  "id_text": "Printer sudah menyala dan terhubung",  "en_text": "Printer is on and connected" },
+        { "id": "driver",  "id_text": "Driver printer sudah terinstall",      "en_text": "Printer driver is installed" },
+        { "id": "confirm", "id_text": "Saya yakin dan siap mencetak",         "en_text": "I confirm I am ready to print" }
+      ]
+    }
+  },
+  "comparisons": [
+    { "id": "gaji_umr",   "icon": "💼", "id_label": "Gaji UMR DKI 2025 (sebulan)",    "en_label": "DKI Min. Wage 2025 (monthly)", "value": 5067381 },
+    { "id": "iphone",     "icon": "📱", "id_label": "Harga iPhone 15 Pro",             "en_label": "iPhone 15 Pro price",          "value": 21999000 },
+    { "id": "avanza",     "icon": "🚗", "id_label": "Toyota Avanza baru",              "en_label": "New Toyota Avanza",            "value": 230000000 },
+    { "id": "rumah",      "icon": "🏠", "id_label": "Rumah subsidi rata-rata",         "en_label": "Avg. subsidized house",        "value": 160000000 },
+    { "id": "ukt",        "icon": "🎓", "id_label": "UKT PTN per semester",            "en_label": "State uni. tuition/semester",  "value": 5000000 },
+    { "id": "bos",        "icon": "🏫", "id_label": "Dana BOS per siswa/tahun",        "en_label": "BOS grant per student/year",   "value": 900000 },
+    { "id": "netflix",    "icon": "🎬", "id_label": "Netflix Premium setahun",         "en_label": "Netflix Premium 1 year",       "value": 1908000 },
+    { "id": "tiket_bali", "icon": "✈️", "id_label": "Tiket Jakarta–Bali PP",           "en_label": "Jakarta–Bali round-trip",      "value": 1800000 },
+    { "id": "listrik",    "icon": "💡", "id_label": "Tagihan listrik rata-rata/bulan", "en_label": "Avg. electricity bill/month",  "value": 500000 },
+    { "id": "makan",      "icon": "🍽️", "id_label": "Makan restoran sekali",          "en_label": "One restaurant meal",          "value": 75000 }
+  ],
+  "devices": {
+    "unsupportedBelow": 280,
+    "breakpoints": {
+      "mobileOld": 320, "mobile": 480, "ipad": 768,
+      "tablet": 1024,   "laptop": 1280, "desktop": 1440
+    }
+  }
+}
